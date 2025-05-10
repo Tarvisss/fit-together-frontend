@@ -1,0 +1,18 @@
+// Override Bootstrap's default color variables
+$primary: #222831; 
+$secondary: #393E46;  
+$light: #EEEEEE;
+$info: #FFD369;
+
+// Now, import the Bootstrap styles after defining your variables
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";  // Import the variables first
+@import "bootstrap/scss/mixins";  // Import mixins
+@import "bootstrap/scss/bootstrap";  // Import the full Bootstrap styles
+@import "font-awesome/scss/font-awesome";
+
+.custom-prev, .custom-next {
+    font-size: 2.3rem;
+    color: $secondary; // or any other color
+  }
+  

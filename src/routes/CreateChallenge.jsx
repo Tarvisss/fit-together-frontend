@@ -8,17 +8,15 @@ import { Container, Row, FloatingLabel} from "react-bootstrap";
 import ApiHandler from '../Api/ApiHandlerClass';
 
 
-function UserSignUp(){
+function CreateChallenge(){
     const navigate = useNavigate();
 
     //initial form state
     const [formState, setFormstate] = useState({
-        username: "",
-        password: "",
-        passwordCheck: "",
-        email: "",
-        firstName: "",
-        lastName: ""
+        title: "",
+        description: "",
+        start_date: "",
+        end_date: "",
     })
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -31,27 +29,27 @@ function UserSignUp(){
         }));
     }   
 
-    //handle signup submission.
-    const handleSignUp = async (e) => {
+    //handle new challenge submission.
+    const newChallenge = async (e) => {
         e.preventDefault();
-        const { username, password, passwordCheck, email, firstName, lastName } = formState;
+        const { title, description, start_date, end_date } = formState;
       
         try {
 
-          if(password !== passwordCheck){
-            throw new Error("Passwords must match");
+          if(!user){
+            throw new Error("Must be logged in to create a challenge");
 
           }
 
-          const signupResponse = await ApiHandler.SignUp(username, password, email, firstName, lastName);
+          const response = await ApiHandler.AddChallenge(title, description, start_date, end_date, created_at, creator_id);
       
-          if (signupResponse) {
+          if (response) {
             navigate('/'); // success, go to homepage
           }
         } catch (err) {
-          console.log("Caught error in handleSignUp:", err);
+          console.log("Caught error in AddChallenge:", err);
 
-          const serverMessage = err.message || "Signup failed.";
+          const serverMessage = err.message || "failed to create the challenge.";
           setErrorMessage(serverMessage);   
         }
       };
@@ -70,23 +68,23 @@ function UserSignUp(){
                 {errorMessage}
               </div>
 )}
-              <Form onSubmit={handleSignUp}>
+              <Form >
                 <Row className='mb-3'>
                 <Form.Group as={Col} className="mb-3" controlId="formGridUsername">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" name="username" value={formState.username} placeholder="Enter Username" onChange={handleChange} />
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text" name="title" value={formState.title} placeholder="Enter title" onChange={handleChange} />
                   </Form.Group>
                
                   <Form.Group as={Col} controlId="formGridEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" name="email" value={formState.email} placeholder="Enter email" onChange={handleChange} />
+                    <Form.Label>Start</Form.Label>
+                    <Form.Control type="datetime-local" name="start" value={formState.start_date} placeholder="Start" onChange={handleChange} />
                   </Form.Group>
                 </Row>
 
                 <Row className='mb-3'>
                   <Form.Group as={Col} controlId="formGridPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" name="password" value={formState.password} placeholder="Password" onChange={handleChange} />
+                    <Form.Label>End</Form.Label>
+                    <Form.Control type="password" name="password" value={formState.end_date} placeholder="End" onChange={handleChange} />
                   </Form.Group>
                 
                   <Form.Group as={Col} controlId="formGridPasswordCheck">
@@ -108,7 +106,7 @@ function UserSignUp(){
                 </Row>
 
                   <Form.Group as={Col} controlId="formGridCity">
-                  <FloatingLabel controlId="floatingTextarea2" label="Tell us about yourself.">
+                  <FloatingLabel controlId="floatingTextarea2" label="Describe your challenge.">
                       <Form.Control
                         as="textarea"
                         style={{ height: '150px' }}
@@ -126,4 +124,4 @@ function UserSignUp(){
     )
 }
 
-export default UserSignUp;
+export default CreateChallenge;

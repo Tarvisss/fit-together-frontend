@@ -1,8 +1,9 @@
 import axios from "axios"
 const BASE_URL = "http://localhost:3000"
+
 export default class ApiHandler {
-    static async request( endpoint, data = {}, method = "get"){
-        const url = `${BASE_URL}/${endpoint}`
+    static async request(endpoint, data = {}, method = "get") {
+        const url = `${BASE_URL}/${endpoint}`;
 
         const headers = {
             'Content-Type': 'application/json'
@@ -15,31 +16,78 @@ export default class ApiHandler {
                 url,
                 method,
                 headers,
-                data: method !== "get" ?  data : {},
+                data: method !== "get" ? data : {},
                 params
             });
             return response.data;
         } catch (error) {
-            console.error("API Error:", error.response);
+            // Check if the server sent back a structured error response.
+            // If it exists, throw it so the calling function (e.g. SignUp) can read and handle it.
+            if (error.response && error.response.data && error.response.data.error) {
+                throw error;
+            }
+
+            // If no detailed error info is available (network issue, server down, etc),
+            // throw a generic error to avoid breaking the app with an undefined reference.
+            throw new Error("API request failed");
         }
     }
 
+
+    /**API Handler Methods */
+    
     static async SignUp(username, password, email, first_name, last_name) {
-        try {
-          // Ensure you're using the correct endpoint for registration
+      try {
           let data = await this.request(
-            "auth/register", // Correct endpoint for registration
-            { username, password, email, first_name, last_name }, // Request body with all required fields
-            "post"
+              "auth/register",
+              { username, password, email, first_name, last_name },
+              "post"
           );
-          // If the response contains a token, return it
-          if (data && data.token) {
-            return data.token;
-          } else {
-            console.error("No token found in response data:", data);
+  
+          // If backend returns an error in the response body. used to display errors to the user
+          if (data?.error) {
+              throw new Error(data.error.message || "Signup failed.");
           }
-        } catch (error) {
+  
+          // If a token is returned, proceed
+          if (data && data.token) {
+              return data.token;
+          } else {
+              throw new Error("No token returned.");
+          }
+      } catch (error) {
           console.error("Error during signup:", error);
-        }
+          const errorMessage =
+              error.response?.data?.error?.message || error.message || "Signup failed.";
+          throw new Error(errorMessage);
       }
+  }
+  
+  static async Login(username, password) {
+    try {
+        let data = await this.request(
+            "auth/login",
+            { username, password },
+            "post"
+        );
+
+        // If backend returns an error in the response body. used to display errors to the user
+        if (data?.error) {
+            throw new Error(data.error.message || "Login failed.");
+        }
+
+        // If a token is returned, proceed
+        if (data && data.token) {
+            return data.token;
+        } else {
+            throw new Error("No token returned.");
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        const errorMessage =
+            error.response?.data?.error?.message || error.message || "Login failed.";
+        throw new Error(errorMessage);
+    }
+}
+  
 }
