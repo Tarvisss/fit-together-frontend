@@ -1,10 +1,11 @@
-import { useContext,useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ChallengeForm from '../components/challangeForm';
 import ApiHandler from '../Api/ApiHandlerClass';
 
 
-function CreateChallenge(){
+function EditChallenge(){
+    const { id } = useParams();
     const navigate = useNavigate();
 
     //initial form state
@@ -26,13 +27,13 @@ function CreateChallenge(){
     }   
 
     //handle new challenge submission.
-    const newChallenge = async (e) => {
+    const UpdateChallenge = async (e) => {
         e.preventDefault();
         const { title, description, start_date, end_date } = formState;
       
         try {
 
-          const created_at = new Date().toISOString(); // Set created_at to current timestamp
+        //   const created_at = new Date().toISOString(); // Set created_at to current timestamp
           const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
           const creator_id = user.userId;
           console.log(creator_id)
@@ -40,7 +41,7 @@ function CreateChallenge(){
           if (!creator_id) {
             throw new Error("Creator ID is not defined or user is not logged in.");
           }
-          const response = await ApiHandler.AddChallenge(title, description, start_date, end_date, created_at, creator_id);
+          const response = await ApiHandler.EditChallenge( id, title, description, start_date, end_date);
         
           if (response) {
             navigate('/'); // success, go to homepage
@@ -57,15 +58,15 @@ function CreateChallenge(){
       
     return (
       <>
-      <h2 className="text-center m-5">Create Challenge</h2>
+      <h2 className="text-center m-5">Editing challenge with ID of: {id}</h2>
       <ChallengeForm
       formState={formState}
       handleChange={handleChange}
-      onSubmit={newChallenge}
+      onSubmit={UpdateChallenge}
       errorMessage={errorMessage}  
       />
         </>
     )
 }
 
-export default CreateChallenge;
+export default EditChallenge;

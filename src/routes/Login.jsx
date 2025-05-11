@@ -1,5 +1,6 @@
-import { useContext,useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 //reactStrap imports
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -10,6 +11,7 @@ import ApiHandler from '../Api/ApiHandlerClass';
 
 function UserLogin(){
     const navigate = useNavigate();
+    const { user, login } = useContext(AuthContext);
 
     //initial form state
     const [formState, setFormstate] = useState({
@@ -37,10 +39,12 @@ function UserLogin(){
           const signupResponse = await ApiHandler.Login(username, password);
       
           if (signupResponse) {
+            console.log(signupResponse)
+            login(signupResponse);
             navigate('/'); // success, go to homepage
           }
         } catch (err) {
-          console.log("Caught error in handleSignUp:", err);
+          console.log("Caught error in handle Login:", err);
 
           const serverMessage = err.message || "Login failed.";
           setErrorMessage(serverMessage);   

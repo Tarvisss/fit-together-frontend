@@ -1,37 +1,30 @@
 import axios from "axios"
+import { jwtDecode } from "jwt-decode";
 const BASE_URL = "http://localhost:3000"
 
 export default class ApiHandler {
-    static async request(endpoint, data = {}, method = "get") {
-        const url = `${BASE_URL}/${endpoint}`;
+  static async request(endpoint, data = {}, method = "get", headers = {}) {
+      const url = `${BASE_URL}/${endpoint}`;
 
-        const headers = {
-            'Content-Type': 'application/json'
-        };
+      const params = method === "get" ? data : {};
 
-        const params = (method === "get") ? data : {};
-
-        try {
-            const response = await axios({
-                url,
-                method,
-                headers,
-                data: method !== "get" ? data : {},
-                params
-            });
-            return response.data;
-        } catch (error) {
-            // Check if the server sent back a structured error response.
-            // If it exists, throw it so the calling function (e.g. SignUp) can read and handle it.
-            if (error.response && error.response.data && error.response.data.error) {
-                throw error;
-            }
-
-            // If no detailed error info is available (network issue, server down, etc),
-            // throw a generic error to avoid breaking the app with an undefined reference.
-            throw new Error("API request failed");
-        }
-    }
+      try {
+          const response = await axios({
+              url,
+              method,
+              headers,  // Pass headers here
+              data: method !== "get" ? data : {},
+              params
+          });
+          return response.data;
+      } catch (error) {
+          // Check if the server sent back a structured error response.
+          if (error.response && error.response.data && error.response.data.error) {
+              throw error;
+          }
+          throw new Error("API request failed");
+      }
+  }
 
 
     /**API Handler Methods */
@@ -76,9 +69,11 @@ export default class ApiHandler {
             throw new Error(data.error.message || "Login failed.");
         }
 
-        // If a token is returned, proceed
+        // If a token is returned, store in localStorage
         if (data && data.token) {
-            return data.token;
+          localStorage.setItem("token", data.token)
+          return data.token;
+          
         } else {
             throw new Error("No token returned.");
         }
@@ -88,6 +83,55 @@ export default class ApiHandler {
             error.response?.data?.error?.message || error.message || "Login failed.";
         throw new Error(errorMessage);
     }
-}
+  }
   
+  static async AddChallenge(title, description, start_date, end_date, created_at){
+    try {
+
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+
+      // const user = JSON.parse(localStorage.getItem("user"));
+      // const creator_id = user.userId
+      const headers = {
+        Authorization: `Bearer ${token}`
+      };
+      
+      const data = { title, description, start_date, end_date, created_at }
+
+      const response = await this.request("challenges", data, "post", headers)
+      return response;
+    } catch (error) {
+        console.error("Error during login:", error);
+        const errorMessage =
+            error.response?.data?.error?.message || error.message || "Login failed.";
+        throw new Error(errorMessage);
+    }
+  }
+
+  static async EditChallenge(id, title, description, start_date, end_date){
+    try {
+
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+
+      // const user = JSON.parse(localStorage.getItem("user"));
+      // const creator_id = user.userId
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      };
+      
+      
+      const data = {id, title, description, start_date, end_date }
+
+      const response = await this.request(`challenges/${id}`, data, "patch", headers)
+      return response;
+    } catch (error) {
+        console.error("Error during login:", error);
+        const errorMessage =
+            error.response?.data?.error?.message || error.message || "Login failed.";
+        throw new Error(errorMessage);
+    }
+  }
 }

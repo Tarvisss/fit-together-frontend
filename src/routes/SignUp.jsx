@@ -1,5 +1,6 @@
 import { useContext,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 //reactStrap imports
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -10,7 +11,7 @@ import ApiHandler from '../Api/ApiHandlerClass';
 
 function UserSignUp(){
     const navigate = useNavigate();
-
+    const { user, login } = useContext(AuthContext);
     //initial form state
     const [formState, setFormstate] = useState({
         username: "",
@@ -44,8 +45,9 @@ function UserSignUp(){
           }
 
           const signupResponse = await ApiHandler.SignUp(username, password, email, firstName, lastName);
-      
+          console.log("Signup response:", signupResponse);
           if (signupResponse) {
+            login(signupResponse);
             navigate('/'); // success, go to homepage
           }
         } catch (err) {
