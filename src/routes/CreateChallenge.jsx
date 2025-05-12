@@ -57,14 +57,14 @@ function CreateChallenge(){
       
     return (
       <>
-      <h2 className="text-center m-5">Create Challenge</h2>
-      <ChallengeForm
-      formState={formState}
-      handleChange={handleChange}
-      onSubmit={newChallenge}
-      errorMessage={errorMessage}  
-      />
-        </>
+        <h2 className="text-center m-5">Create Challenge</h2>
+        <ChallengeForm
+        formState={formState}
+        handleChange={handleChange}
+        onSubmit={newChallenge}
+        errorMessage={errorMessage}  
+        />
+      </>
     )
 }
 

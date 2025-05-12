@@ -8,7 +8,7 @@ import UserLogin from './routes/Login';
 import Homepage from './routes/Home';
 import CreateChallenge from './routes/CreateChallenge';
 import EditChallenge from './routes/EditChallenge';
-
+import ChallengeHome from './routes/challengeHome';
 function App() {
 
   return (
@@ -19,8 +19,9 @@ function App() {
             <Route path='auth/register' element={<UserSignUp/>}/>
             <Route path='auth/login' element={<UserLogin/>}/>
             <Route path='/' element={<Homepage/>}/>
-            <Route path='/challenges' element={<CreateChallenge/>}/>
+            <Route path='/challenges/create' element={<CreateChallenge/>}/>
             <Route path='/challenges/:id/edit' element={<EditChallenge/>}/>
+            <Route path='/challenges/home' element={<ChallengeHome/>}/>
           </Routes>
       </BrowserRouter>
     </>

@@ -22,11 +22,12 @@ function BasicExample() {
           />
           {' '}Fit+Together</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-sm-auto ">
-            <Nav.Link href="challenges" className="fw-bold"><FontAwesomeIcon icon={faTrophy}className='fs-3' /></Nav.Link>
-            <Nav.Link href="/" className="fw-bold"><FontAwesomeIcon icon={faHome}className='fs-3' /></Nav.Link>
-            <Nav.Link href="profile" className="fw-bold"><FontAwesomeIcon icon={faUserCircle}className='fs-3' /></Nav.Link>
+        <Navbar.Collapse id="basic-navbar-nav" className='w-100'>
+          <Nav className="ms-sm-auto text-end ">
+            {/* <Nav.Link href="challenges" className="fw-bold"><FontAwesomeIcon icon={faTrophy}className='fs-3 pe-1' /></Nav.Link> */}
+            <Nav.Link href="/challenges/home" className="fw-bold"><FontAwesomeIcon icon={faTrophy}className='fs-3 pe-1' /></Nav.Link>
+            <Nav.Link href="/" className="fw-bold"><FontAwesomeIcon icon={faHome}className='fs-3 pe-1' /></Nav.Link>
+            <Nav.Link href="/profile" className="fw-bold"><FontAwesomeIcon icon={faUserCircle}className='fs-3 pe-1' /></Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

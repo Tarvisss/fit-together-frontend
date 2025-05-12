@@ -1,5 +1,4 @@
 import axios from "axios"
-import { jwtDecode } from "jwt-decode";
 const BASE_URL = "http://localhost:3000"
 
 export default class ApiHandler {
@@ -85,14 +84,22 @@ export default class ApiHandler {
     }
   }
   
+  static async FetchChallenges(){
+
+      const token = localStorage.getItem("token");
+      
+
+      const headers = {
+        Authorization: `Bearer ${token}`
+      };
+      const response = await this.request("challenges", {}, "get", headers)
+      return response;
+  }
+
   static async AddChallenge(title, description, start_date, end_date, created_at){
     try {
 
       const token = localStorage.getItem("token");
-      console.log("Token:", token);
-
-      // const user = JSON.parse(localStorage.getItem("user"));
-      // const creator_id = user.userId
       const headers = {
         Authorization: `Bearer ${token}`
       };
@@ -115,8 +122,6 @@ export default class ApiHandler {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
 
-      // const user = JSON.parse(localStorage.getItem("user"));
-      // const creator_id = user.userId
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
@@ -133,5 +138,39 @@ export default class ApiHandler {
             error.response?.data?.error?.message || error.message || "Login failed.";
         throw new Error(errorMessage);
     }
+  }
+
+  static async joinChallenge(challengeId, user_id){
+    const token = localStorage.getItem("token");
+      console.log("Token:", token);
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      };
+
+      const response = await this.request(`challenges/${challengeId}/join`, {user_id}, "post", headers)
+      return response;
+  } 
+
+  static async leaveChallenge(challengeId, user_id){
+    const token = localStorage.getItem("token")
+    const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+    const response = await this.request(`challenges/${challengeId}/leave`, {user_id}, "delete", headers)
+    return response;
+  }
+
+  static async getJoinedChallengeIds(user_id){
+    const token = localStorage.getItem("token")
+    const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+
+    const response = await this.request(`users/${user_id}/joined_challenges`, {}, "get", headers)
+    return response.map((c) => c.id)
   }
 }
