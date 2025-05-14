@@ -5,7 +5,6 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }){
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const [username, setUsername] = useState(null)
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
@@ -13,7 +12,10 @@ export function AuthProvider({ children }){
             try { 
                 const decoded = jwtDecode(storedToken);
                 setToken(storedToken);
-                setUser(decoded);
+                setUser({
+                    userId: decoded.userId,
+                    username: decoded.username
+                });
             } catch (error) {
                 logout();
             }
@@ -21,29 +23,28 @@ export function AuthProvider({ children }){
     },[]);
 
     const login = (jwtToken) => {
+
         const decoded = jwtDecode(jwtToken);
         const userData = {
             userId: decoded.userId,
-            username: username
+            username: decoded.username
         }
+
         console.log(decoded)
         localStorage.setItem("token", jwtToken);
-        localStorage.setItem("user", JSON.stringify(decoded));
 
         setUser(userData);
-        setUsername(username)
         setToken(jwtToken);
       };
 
     const logout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("user")
         setToken(null);
         setUser(null);
     };
-
+    const isAuthenticated = !!token;
     return (
-        <AuthContext.Provider value={{user, token, login, logout}}>
+        <AuthContext.Provider value={{user, token, login, logout, isAuthenticated}}>
             {children}
         </AuthContext.Provider>
     )

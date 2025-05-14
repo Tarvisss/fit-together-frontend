@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -160,6 +161,42 @@ export default class ApiHandler {
     };
 
     return await this.request(`challenges/${challengeId}/leave`, { user_id }, "delete", headers);
+  }
+
+
+  // ─────────────────────────────
+  // USER COMMENTS
+  // ─────────────────────────────
+
+  static async createComment(challengeId, content){
+    const token = localStorage.getItem("token")
+    if(!token){
+        throw new Error("No token found! Login first.")
+    }
+    const decoded = jwtDecode(token);
+    const userId = decoded.userId
+    const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+    const data = {userId, content}
+
+    const response = await this.request(`challenges/${challengeId}`, data, "post", headers);
+    return response;
+
+  }
+
+  static async fetchComments(challengeId){
+    const token = localStorage.getItem("token")
+    if(!token){
+        throw new Error("Must be logged in!")
+    }
+    const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+    const response = await this. request(`challenges/${challengeId}`, {}, "get", headers)
+    return response;
   }
 
   // ─────────────────────────────

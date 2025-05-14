@@ -1,4 +1,6 @@
-import ProtectedRoutes from '../components/ProtectedRoutes';
+
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -9,7 +11,8 @@ import { faHome, faUserCircle, faTrophy } from '@fortawesome/free-solid-svg-icon
 
 
 
-function BasicExample() {
+function NavbarComponent() {
+  const { isAuthenticated, user, logout} = useContext(AuthContext);
   return (
     <Navbar expand="md" bg="info" variant="light" className="shadow-lg rounded-bottom px-10">
       <Container>
@@ -25,10 +28,25 @@ function BasicExample() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className='w-100'>
           <Nav className="ms-sm-auto text-end ">
-            {/* <Nav.Link href="challenges" className="fw-bold"><FontAwesomeIcon icon={faTrophy}className='fs-3 pe-1' /></Nav.Link> */}
-            <Nav.Link href="/challenges/home" className="fw-bold"><FontAwesomeIcon icon={faTrophy}className='fs-3 pe-1' /></Nav.Link>
+            {/* Links that will show regardless of isAuth*/}
             <Nav.Link href="/" className="fw-bold"><FontAwesomeIcon icon={faHome}className='fs-3 pe-1' /></Nav.Link>
+            {/* Links that will show for unAuthorized users*/}
+            {!isAuthenticated && (
+              <>
+            
+            <Nav.Link href='/auth/login' className="fw-bold">Login</Nav.Link>
+            </>
+            )}
+
+            {/* all routes for authorizied users */}
+            {isAuthenticated && (
+            <>
+            <Nav.Link href="/challenges/home" className="fw-bold"><FontAwesomeIcon icon={faTrophy}className='fs-3 pe-1' /></Nav.Link>
             <Nav.Link href="/user/:username" className="fw-bold"><FontAwesomeIcon icon={faUserCircle}className='fs-3 pe-1' /></Nav.Link>
+            <Nav.Link href='/' className="fw-bold" onClick={() => {logout()}}>Logout</Nav.Link>
+          
+          </>
+        )}
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -36,4 +54,4 @@ function BasicExample() {
   );
 }
 
-export default BasicExample;
+export default NavbarComponent;

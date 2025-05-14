@@ -43,7 +43,7 @@ function CreateChallenge(){
           const response = await ApiHandler.AddChallenge(title, description, start_date, end_date, created_at, creator_id);
         
           if (response) {
-            navigate('/'); // success, go to homepage
+            navigate('/'); 
           }
         } catch (err) {
           console.log("Caught error in AddChallenge:", err);

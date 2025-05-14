@@ -25,7 +25,8 @@ const navigate = useNavigate();
                                 <Button 
                                 className=" border shadow" 
                                 size="md"
-                                onClick={navigate("/")}>Go to Challenge</Button>
+                                // navigate to the page for the challenge
+                                onClick={() => navigate(`/challenges/${challenge.id}`)}>Go to Challenge</Button>
                             </div>
                         </div>
                       <div className="d-flex justify-content-between align-items-center mt-3">
