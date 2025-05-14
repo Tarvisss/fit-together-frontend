@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ChallengeForm from '../components/challangeForm';
 import ApiHandler from '../Api/ApiHandlerClass';
@@ -33,8 +33,7 @@ function EditChallenge(){
       
         try {
 
-        //   const created_at = new Date().toISOString(); // Set created_at to current timestamp
-          const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
+          const user = JSON.parse(localStorage.getItem("user"));
           const creator_id = user.userId;
           console.log(creator_id)
 
@@ -58,14 +57,14 @@ function EditChallenge(){
       
     return (
       <>
-      <h2 className="text-center m-5">Editing challenge with ID of: {id}</h2>
-      <ChallengeForm
-      formState={formState}
-      handleChange={handleChange}
-      onSubmit={UpdateChallenge}
-      errorMessage={errorMessage}  
-      />
-        </>
+        <h2 className="text-center m-5">Editing challenge with ID of: {id}</h2>
+            <ChallengeForm
+            formState={formState}
+            handleChange={handleChange}
+            onSubmit={UpdateChallenge}
+            errorMessage={errorMessage}  
+            />
+      </>
     )
 }
 

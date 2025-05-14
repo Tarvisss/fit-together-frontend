@@ -1,176 +1,200 @@
-import axios from "axios"
-const BASE_URL = "http://localhost:3000"
+import axios from "axios";
+
+const BASE_URL = "http://localhost:3000";
 
 export default class ApiHandler {
+  /** Generic request wrapper */
   static async request(endpoint, data = {}, method = "get", headers = {}) {
-      const url = `${BASE_URL}/${endpoint}`;
+    const url = `${BASE_URL}/${endpoint}`;
+    const params = method === "get" ? data : {};
 
-      const params = method === "get" ? data : {};
-
-      try {
-          const response = await axios({
-              url,
-              method,
-              headers,  // Pass headers here
-              data: method !== "get" ? data : {},
-              params
-          });
-          return response.data;
-      } catch (error) {
-          // Check if the server sent back a structured error response.
-          if (error.response && error.response.data && error.response.data.error) {
-              throw error;
-          }
-          throw new Error("API request failed");
+    try {
+      const response = await axios({
+        url,
+        method,
+        headers,
+        data: method !== "get" ? data : {},
+        params
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response?.data?.error) {
+        throw error;
       }
+      throw new Error("API request failed");
+    }
   }
 
+  // ─────────────────────────────
+  // AUTH
+  // ─────────────────────────────
 
-    /**API Handler Methods */
-    
-    static async SignUp(username, password, email, first_name, last_name) {
-      try {
-          let data = await this.request(
-              "auth/register",
-              { username, password, email, first_name, last_name },
-              "post"
-          );
-  
-          // If backend returns an error in the response body. used to display errors to the user
-          if (data?.error) {
-              throw new Error(data.error.message || "Signup failed.");
-          }
-  
-          // If a token is returned, proceed
-          if (data && data.token) {
-              return data.token;
-          } else {
-              throw new Error("No token returned.");
-          }
-      } catch (error) {
-          console.error("Error during signup:", error);
-          const errorMessage =
-              error.response?.data?.error?.message || error.message || "Signup failed.";
-          throw new Error(errorMessage);
+  static async SignUp(username, password, email, first_name, last_name) {
+    try {
+      const data = await this.request(
+        "auth/register",
+        { username, password, email, first_name, last_name },
+        "post"
+      );
+
+      if (data?.error) {
+        throw new Error(data.error.message || "Signup failed.");
       }
+
+      if (data?.token) {
+        return data.token;
+      }
+
+      throw new Error("No token returned.");
+    } catch (error) {
+      console.error("Error during signup:", error);
+      const errorMessage =
+        error.response?.data?.error?.message || error.message || "Signup failed.";
+      throw new Error(errorMessage);
+    }
   }
-  
+
   static async Login(username, password) {
     try {
-        let data = await this.request(
-            "auth/login",
-            { username, password },
-            "post"
-        );
+      const data = await this.request(
+        "auth/login",
+        { username, password },
+        "post"
+      );
 
-        // If backend returns an error in the response body. used to display errors to the user
-        if (data?.error) {
-            throw new Error(data.error.message || "Login failed.");
-        }
+      if (data?.error) {
+        throw new Error(data.error.message || "Login failed.");
+      }
 
-        // If a token is returned, store in localStorage
-        if (data && data.token) {
-          localStorage.setItem("token", data.token)
-          return data.token;
-          
-        } else {
-            throw new Error("No token returned.");
-        }
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        return data.token;
+      }
+
+      throw new Error("No token returned.");
     } catch (error) {
-        console.error("Error during login:", error);
-        const errorMessage =
-            error.response?.data?.error?.message || error.message || "Login failed.";
-        throw new Error(errorMessage);
-    }
-  }
-  
-  static async FetchChallenges(){
-
-      const token = localStorage.getItem("token");
-      
-
-      const headers = {
-        Authorization: `Bearer ${token}`
-      };
-      const response = await this.request("challenges", {}, "get", headers)
-      return response;
-  }
-
-  static async AddChallenge(title, description, start_date, end_date, created_at){
-    try {
-
-      const token = localStorage.getItem("token");
-      const headers = {
-        Authorization: `Bearer ${token}`
-      };
-      
-      const data = { title, description, start_date, end_date, created_at }
-
-      const response = await this.request("challenges", data, "post", headers)
-      return response;
-    } catch (error) {
-        console.error("Error during login:", error);
-        const errorMessage =
-            error.response?.data?.error?.message || error.message || "Login failed.";
-        throw new Error(errorMessage);
+      console.error("Error during login:", error);
+      const errorMessage =
+        error.response?.data?.error?.message || error.message || "Login failed.";
+      throw new Error(errorMessage);
     }
   }
 
-  static async EditChallenge(id, title, description, start_date, end_date){
-    try {
+  // ─────────────────────────────
+  // CHALLENGES
+  // ─────────────────────────────
 
-      const token = localStorage.getItem("token");
-      console.log("Token:", token);
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      };
-      
-      
-      const data = {id, title, description, start_date, end_date }
-
-      const response = await this.request(`challenges/${id}`, data, "patch", headers)
-      return response;
-    } catch (error) {
-        console.error("Error during login:", error);
-        const errorMessage =
-            error.response?.data?.error?.message || error.message || "Login failed.";
-        throw new Error(errorMessage);
-    }
-  }
-
-  static async joinChallenge(challengeId, user_id){
+  static async FetchChallenges() {
     const token = localStorage.getItem("token");
-      console.log("Token:", token);
 
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+
+    return await this.request("challenges", {}, "get", headers);
+  }
+
+  static async FetchChallenge(id) {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+        Authorization: `Bearer ${token}`
+    }
+
+    return await this.request(`challenges/${id}`, {}, "get", headers)
+  }
+  static async AddChallenge(title, description, start_date, end_date, created_at) {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = {
+        Authorization: `Bearer ${token}`
+      };
+
+      const data = { title, description, start_date, end_date, created_at };
+
+      return await this.request("challenges", data, "post", headers);
+    } catch (error) {
+      console.error("Error during add challenge:", error);
+      const errorMessage =
+        error.response?.data?.error?.message || error.message || "Add challenge failed.";
+      throw new Error(errorMessage);
+    }
+  }
+
+  static async EditChallenge(id, title, description, start_date, end_date) {
+    try {
+      const token = localStorage.getItem("token");
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
       };
 
-      const response = await this.request(`challenges/${challengeId}/join`, {user_id}, "post", headers)
-      return response;
-  } 
+      const data = { id, title, description, start_date, end_date };
 
-  static async leaveChallenge(challengeId, user_id){
-    const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
+      return await this.request(`challenges/${id}`, data, "patch", headers);
+    } catch (error) {
+      console.error("Error during edit challenge:", error);
+      const errorMessage =
+        error.response?.data?.error?.message || error.message || "Edit challenge failed.";
+      throw new Error(errorMessage);
     }
-    const response = await this.request(`challenges/${challengeId}/leave`, {user_id}, "delete", headers)
-    return response;
   }
 
-  static async getJoinedChallengeIds(user_id){
-    const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-    }
+  static async joinChallenge(challengeId, user_id) {
+    const token = localStorage.getItem("token");
 
-    const response = await this.request(`users/${user_id}/joined_challenges`, {}, "get", headers)
-    return response.map((c) => c.id)
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+
+    return await this.request(`challenges/${challengeId}/join`, { user_id }, "post", headers);
+  }
+
+  static async leaveChallenge(challengeId, user_id) {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+
+    return await this.request(`challenges/${challengeId}/leave`, { user_id }, "delete", headers);
+  }
+
+  // ─────────────────────────────
+  // USER CHALLENGES
+  // ─────────────────────────────
+
+  static async getJoinedChallengeIds(user_id) {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+
+    const response = await this.request(`users/${user_id}/joined_challenges`, {}, "get", headers);
+    return response.map(c => c.id);
+  }
+
+  static async getUserJoinedChallenges(user_id) {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+
+    return await this.request(`users/${user_id}/full_joined_challenges`, {}, "get", headers);
+  }
+
+  // ─────────────────────────────
+  // ZENQUOTES
+  // ─────────────────────────────
+
+  static async getQuote(url) {
+    const response = await axios.get(url);
+    return response.data;
   }
 }

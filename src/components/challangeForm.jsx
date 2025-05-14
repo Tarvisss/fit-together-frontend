@@ -10,16 +10,16 @@ import { Container, Row, FloatingLabel} from "react-bootstrap";
 function ChallengeForm({ formState, handleChange, newChallenge, errorMessage, onSubmit}){
     return (
         <>
-                <Container className="d-flex justify-content-center align-items-center mt-5 mb-5">
-          <div className="p-3 border rounded shadow" style={{ width: "100%", maxWidth: "600px" }}>
+            <Container className="d-flex justify-content-center align-items-center mt-5 mb-5">
+             <div className="p-3 border rounded shadow" style={{ width: "100%", maxWidth: "600px" }}>
             
 
             {/* display error messages to the user */}
-            {errorMessage && (
-              <div className="alert alert-danger text-center" role="alert">
-                {errorMessage}
-              </div>
-)}
+                {errorMessage && (
+                    <div className="alert alert-danger text-center" role="alert">
+                        {errorMessage}
+                    </div>
+                )}
               <Form onSubmit={onSubmit}>
                 <Row className='mb-3'>
                 <Form.Group as={Col} className="mb-3" controlId="formGridUsername">

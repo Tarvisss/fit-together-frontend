@@ -1,18 +1,20 @@
 import React from "react";
+import ListChallenges from "../components/ListChallenges";
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useToggleChallenge from "../customHooks/useToggleJoin";
 import ApiHandler from "../Api/ApiHandlerClass";
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import challengeImg from '../assets/abstract-yellow-smooth-wave-lines.png';
+
 import workoutPic1 from '../assets/3699912.jpg';
 import workoutPic2 from '../assets/3644843.jpg';
 
 function ChallengeHome(){
-
+    const [startingIds, setStartingIds] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [challenges, setChallenges] = useState([])
     const [showChallenges, setShowChallenges] = useState(false)
-    const [joinedChallengeIds, setJoinedChallengeIds] = useState([])
+    //store all the challenges that a user has joined by the challenge id
     const navigate = useNavigate();
     
 
@@ -24,41 +26,25 @@ function ChallengeHome(){
         }
         getChallenges();
     },[])
-
+    //fetch all the challenges by challenge id that a user has joined
     useEffect(() => {
         const fetchJoinedChallenges = async () => {
           const user = JSON.parse(localStorage.getItem("user"));
           const userId = user?.userId;
       
           if (userId) {
-            const joined = await ApiHandler.getJoinedChallengeIds(userId); // new method you'll add
-            setJoinedChallengeIds(joined); // should be array of challenge IDs
+            const joined = await ApiHandler.getJoinedChallengeIds(userId); 
+            setStartingIds(joined); // should be array of challenge IDs
           }
+          setLoading(false)
         };
       
         fetchJoinedChallenges();
       }, []);
-      
-      const toggleChallenge = async (challengeId) => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const userId = user.userId;
-      
-        if (joinedChallengeIds.includes(challengeId)) {
-          try {
-            await ApiHandler.leaveChallenge(challengeId, userId);
-            setJoinedChallengeIds(prev => prev.filter(id => id !== challengeId));
-          } catch (err) {
-            console.error("Error leaving challenge:", err);
-          }
-        } else {
-          try {
-            await ApiHandler.joinChallenge(challengeId, userId);
-            setJoinedChallengeIds(prev => [...prev, challengeId]);
-          } catch (err) {
-            console.error("Error joining challenge:", err);
-          }
-        }
-      };
+
+      //toggle joining a challenge
+      const { joinedChallengeIds, toggleChallenge } = useToggleChallenge(startingIds);
+
       
 
     return (
@@ -91,58 +77,17 @@ function ChallengeHome(){
               </div>
             </div>
 
-    {/* use state to only display the challenges if a user clicks on the card */}
-    {showChallenges && (
-        <>
-          
-          <div className=" justify-content-center g-4">
-            {challenges.length > 0 ? (
-              challenges.map((challenge) => (
-                <div className=" d-flex justify-content-center m-4" key={challenge.id}>
-                  <Card  className="border shadow" style={{ width: '100%', maxWidth: '680px', padding: "5px" }}>
-                    <Card.Img variant="top" src={challengeImg} style={{ height: "150px", objectFit: "cover" }} />
-                    <Card.Body>
-                      <Card.Title>{challenge.title}</Card.Title>
-                      <Card.Text>{challenge.description}</Card.Text>
-                      
-                      <div className="d-flex justify-content-between align-items-center mt-3">
-                          <Card.Text className="mb-0"><b>Start: </b> 
-                            {new Date(challenge.start_date).toLocaleString(undefined, 
-                                {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                })}</Card.Text>
-                          <Card.Text className="mb-0"><b>End: </b>
-                          {new Date(challenge.end_date).toLocaleString(undefined, 
-                                {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                })}
-                            </Card.Text>
-                          <Button variant="outline-primary" 
-                        //   disabled={joinedChallengeIds.includes(challenge.id)}
-                          size="md" 
-                          onClick={() => toggleChallenge(challenge.id)}>{joinedChallengeIds.includes(challenge.id) ? "Leave Challenge" : "Join Challenge"}</Button>
-                      </div>
-
-                    </Card.Body>
-                  </Card>
-                </div>
-              ))
-            ) : (
-              <p className="text-center">No Challenges</p>
+            {/* use state to only display the challenges if a user clicks on the card */}
+            {showChallenges && (
+                <ListChallenges 
+                    challenges={challenges}
+                    joinedChallengeIds={joinedChallengeIds}
+                    toggleChallenge={toggleChallenge}
+                    showChallenges={showChallenges}
+                />
             )}
-          </div>
-          </>
-         )}
         </div>
-      );
+    );
       
 }
 

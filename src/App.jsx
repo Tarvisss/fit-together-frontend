@@ -9,6 +9,9 @@ import Homepage from './routes/Home';
 import CreateChallenge from './routes/CreateChallenge';
 import EditChallenge from './routes/EditChallenge';
 import ChallengeHome from './routes/challengeHome';
+import UserProfile from './routes/UserProfile';
+import ProtectedRoutes from './components/ProtectedRoutes';
+import SingleChallengePage from './routes/SingleChallengePage';
 function App() {
 
   return (
@@ -19,9 +22,14 @@ function App() {
             <Route path='auth/register' element={<UserSignUp/>}/>
             <Route path='auth/login' element={<UserLogin/>}/>
             <Route path='/' element={<Homepage/>}/>
-            <Route path='/challenges/create' element={<CreateChallenge/>}/>
-            <Route path='/challenges/:id/edit' element={<EditChallenge/>}/>
-            <Route path='/challenges/home' element={<ChallengeHome/>}/>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoutes/>}>
+              <Route path='/challenges/create' element={<CreateChallenge/>}/>
+              <Route path='/challenges/:id/edit' element={<EditChallenge/>}/>
+              <Route path='/challenges/home' element={<ChallengeHome/>}/>
+              <Route path='/challenges/:id' element={<SingleChallengePage/>}/>
+              <Route path='/user/:username' element={<UserProfile/>}/>
+            </Route>
           </Routes>
       </BrowserRouter>
     </>
