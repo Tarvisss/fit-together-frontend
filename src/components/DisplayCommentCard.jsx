@@ -1,34 +1,53 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Image from "react-bootstrap/Image";
-import { Container, Row, FloatingLabel } from "react-bootstrap";
-import profilePic from "../assets/png-clipart-wall-decal-sticker-bodybuilding-fitness-centre-bodybuilding-physical-fitness-hand (1).png";
+import { Container, Row } from "react-bootstrap";
+ import fallbackProfilePic from "../assets/png-clipart-wall-decal-sticker-bodybuilding-fitness-centre-bodybuilding-physical-fitness-hand (1).png";
 
-function DisplayCommentCard() {
-
+function DisplayCommentCard({ comment }) {
+    const BASE_URL = "http://localhost:3000";
+    const username = comment?.users?.username || "Anonymous";
+    const profilePic = comment?.users?.imageUrl ? `${BASE_URL}${comment.users.imageUrl}` : fallbackProfilePic
+    console.log(profilePic)
   return (
-    <div>
-      <Container className="d-flex justify-content-center align-items-center mt-5 mb-5">
-        <div className="p-3 border rounded shadow" src={profilePic} style={{ width: "100%", maxWidth: "600px" }}>
-          <Form>
-            <Row>
-              <Form.Group as={Col} className="mb-1" controlId="formGriduserPic">
-                <Col xs={3} md={4}>
-                  <Image src={profilePic} roundedCircle style={{ maxWidth: "100%", width: "70px", boxShadow: "0 0 2px " }} />
-                </Col>
-              </Form.Group>
-            </Row>
-            <Form.Group as={Col} controlId="formGridCommentDisplay">
-              <FloatingLabel label="Leave a comment.">
-                
-              </FloatingLabel>
-            </Form.Group>
-          </Form>
-        </div>
-      </Container>
-    </div>
+    <Container className="d-flex justify-content-center align-items-center mt-3">
+      <div
+        className="p-3 border rounded shadow w-100"
+        style={{
+          maxWidth: "600px",
+          wordBreak: "break-word",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+        <Row>
+          <Col xs={3} md={2} className="d-flex justify-content-center">
+            <Image
+              src={profilePic}
+              roundedCircle
+              style={{ width: "60px", height: "60px", objectFit: "cover", boxShadow: "0 0 2px" }}
+            />
+          </Col>
+
+          <Col xs={9} md={10}>
+            <div className="d-flex justify-content-between">
+              <h5><b>{username}</b> : commented</h5>
+              <small className="text-muted">
+                {new Date(comment.created_at).toLocaleString(undefined, {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                })}
+              </small>
+            </div>
+            
+            <div style={{ marginTop: "4px", fontSize: "1.1rem", lineHeight: "1.6",}}>
+              {comment.content}
+            </div>
+          </Col>
+        </Row>
+      </div>
+    </Container>
   );
 }
 

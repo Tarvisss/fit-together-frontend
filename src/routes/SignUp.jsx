@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import { Container, Row, FloatingLabel} from "react-bootstrap";
+import { Container, Row} from "react-bootstrap";
 import ApiHandler from '../Api/ApiHandlerClass';
 
 
@@ -13,6 +13,9 @@ function UserSignUp(){
     const navigate = useNavigate();
     const { user, login } = useContext(AuthContext);
     //initial form state
+    const [profileImage, setProfileImage] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
     const [formState, setFormstate] = useState({
         username: "",
         password: "",
@@ -21,7 +24,8 @@ function UserSignUp(){
         firstName: "",
         lastName: ""
     })
-    const [errorMessage, setErrorMessage] = useState("");
+
+    
 
     //hanlder to update the form fields
     const handleChange = (e) => {
@@ -30,7 +34,14 @@ function UserSignUp(){
             ...state, 
             [name]: value
         }));
-    }   
+    } 
+
+    // handle image change
+    const handleImageChange = (e) => {
+      const file = e.target.files[0];
+      setProfileImage(file);
+      setPreview(URL.createObjectURL(file));
+    };
 
     //handle signup submission.
     const handleSignUp = async (e) => {
@@ -43,8 +54,22 @@ function UserSignUp(){
             throw new Error("Passwords must match");
 
           }
+          // Since I'm uploading an image (binary data) along with text fields,
+          // I need to use FormData instead of JSON.
+          // FormData allows me to send both types of data (text + file)
+          // in a single multipart/form-data request, which the backend can parse.
+          const formData = new FormData();
+          formData.append("username", username);
+          formData.append("password", password);
+          formData.append("email", email);
+          formData.append("first_name", firstName);
+          formData.append("last_name", lastName);
 
-          const signupResponse = await ApiHandler.SignUp(username, password, email, firstName, lastName);
+          if (profileImage) {
+          formData.append("image", profileImage);
+          }
+
+          const signupResponse = await ApiHandler.SignUp(formData);
           console.log("Signup response:", signupResponse);
           if (signupResponse) {
             login(signupResponse);
@@ -109,14 +134,12 @@ function UserSignUp(){
                   </Form.Group>
                 </Row>
 
-                  <Form.Group as={Col} controlId="formGridCity">
-                  <FloatingLabel controlId="floatingTextarea2" label="Tell us about yourself.">
-                      <Form.Control
-                        as="textarea"
-                        style={{ height: '150px' }}
-                      />
-                      </FloatingLabel>
-                  </Form.Group>
+                <Form.Group className="mb-3" controlId="formFile">
+                  <Form.Label>Profile Image</Form.Label>
+                    <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+                    {preview && <img src={preview} alt="Preview" className="mt-2" width="100" />}
+                </Form.Group>
+
               <div className="d-grid gap-2">
                 <Button className="justify-content-center align-items-center" variant="outline-primary" type="submit">
                   Submit

@@ -30,22 +30,27 @@ export default class ApiHandler {
   // AUTH
   // ─────────────────────────────
 
-  static async SignUp(username, password, email, first_name, last_name) {
+  static async SignUp(formData) {
     try {
       const data = await this.request(
         "auth/register",
-        { username, password, email, first_name, last_name },
-        "post"
+        formData, // Pass the formData as the payload
+        "post",
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important to set this header
+          },
+        }
       );
-
+  
       if (data?.error) {
         throw new Error(data.error.message || "Signup failed.");
       }
-
+  
       if (data?.token) {
         return data.token;
       }
-
+  
       throw new Error("No token returned.");
     } catch (error) {
       console.error("Error during signup:", error);
@@ -54,6 +59,7 @@ export default class ApiHandler {
       throw new Error(errorMessage);
     }
   }
+  
 
   static async Login(username, password) {
     try {
@@ -195,7 +201,7 @@ export default class ApiHandler {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
     }
-    const response = await this. request(`challenges/${challengeId}`, {}, "get", headers)
+    const response = await this. request(`challenges/${challengeId}/comments`, {}, "get", headers)
     return response;
   }
 

@@ -4,6 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import challengeImg from '../assets/abstract-yellow-smooth-wave-lines.png'; 
 import ApiHandler from "../Api/ApiHandlerClass";
 import NewComment from "./NewComment";
+import DisplayCommentCard from "../components/DisplayCommentCard";
 
 
 function SingleChallengePage(){
@@ -12,9 +13,10 @@ function SingleChallengePage(){
     const [challenge, setChallenge] = useState({});
     const [comments, setComments] = useState({})
     const [toggleCommentWindow, setToggleCommentWindow] = useState(false);
-    const [toggleComments, setToggleComments] = useState(false)
+    const [toggleComments, setToggleComments] = useState(true)
     const [loading, setLoading] = useState(true)
-
+    
+    // get a single challenge and display it for commenting
     useEffect(() => {
         const getChallenge = async () => {
             try {
@@ -28,20 +30,34 @@ function SingleChallengePage(){
         getChallenge();
     },[id]);
 
+    // fetch all the comments for a challenge
     useEffect(() => {
         const getComments = async () => {
             try {
                 const comments = await ApiHandler.fetchComments(id);
+                
                 setComments(comments);
+                
             } catch (error) {
                 console.error(error);
             }
         }
         getComments();
     },[id])
-
+    
+    //wait until comments render
+    if (comments.length === 0) {
+        return <p>Loading comments...</p>;
+      }
+    
+    // after submitting a comment, fetch the comments again to include the latest comment  
+    const addComment =  async (NewComment) => {
+        const updatedComments = await ApiHandler.fetchComments(id);
+        setComments(updatedComments);
+    };
     return (
-        <div className=" d-flex flex-column justify-content-center m-3" key={challenge.id}>
+        <div className="d-flex flex-column align-items-center justify-content-center m-3" key={challenge.id}>
+
                   <Card  className="border shadow" style={{ width: '100%', maxWidth: '800px', padding: "5px" }}>
                     <Card.Img variant="top" src={challengeImg} style={{ height: "150px", objectFit: "cover" }} />
                     <Card.Body>
@@ -50,11 +66,11 @@ function SingleChallengePage(){
                                 <Card.Title>{challenge.title}</Card.Title>
                                 <Card.Text>{challenge.description}</Card.Text>
                             </div>  
+                            
                             <div className="ms-auto">
                                 <Button 
                                   className=" border shadow" 
                                   size="md"
-                                  // navigate to the page for the challenge
                                   onClick={() => setToggleCommentWindow(prev => !prev)}
                                 >
                                   {toggleCommentWindow ? "Hide comment window" : "leave a comment"}
@@ -89,15 +105,32 @@ function SingleChallengePage(){
                       </div>
                     </Card.Body>
                   </Card>
-                {toggleCommentWindow && (
-                  <div className="mt-3">
-                    <NewComment />
-                  </div>
-                )}
+                  {toggleCommentWindow && (
+                    <div className="mt-3 d-flex justify-content-center w-100">
+                      <div style={{ width: '100%', maxWidth: '800px' }}>
+                        <NewComment addComment={addComment} />
+                      </div>
+                    </div>
+                  )}
+
+                    <div className=" mt-3 d-flex justify-content-center w-100 ">
+                                <Button 
+                                  className=" border shadow"
+                                  style={{ width: '100%', maxWidth: '600px' }} 
+                                  size="lg"
+                                  onClick={() => setToggleComments(prev => !prev)}
+                                >
+                                  {toggleComments ? "Hide comments" : "Show comments"}
+                                </Button>
+                            </div>
                 {toggleComments && (
-                  <div className="mt-3">
-                    <NewComment />
-                  </div>
+                    comments.length > 0 ? (
+                        comments.map((comment) => (
+                            <DisplayCommentCard key={comment.id} comment={comment}/>
+                        ))
+                    ) : (
+                        <h3 className="text-center m-5">No comments yet 😞</h3>
+                  )
                 )}
          </div>
     )

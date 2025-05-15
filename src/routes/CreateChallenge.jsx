@@ -2,9 +2,10 @@ import { useContext,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChallengeForm from '../components/challangeForm';
 import ApiHandler from '../Api/ApiHandlerClass';
-
+import { AuthContext } from '../context/AuthContext';
 
 function CreateChallenge(){
+    const { isAuthenticated, user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
     //initial form state
@@ -33,7 +34,6 @@ function CreateChallenge(){
         try {
 
           const created_at = new Date().toISOString(); // Set created_at to current timestamp
-          const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
           const creator_id = user.userId;
           console.log(creator_id)
 
@@ -43,7 +43,7 @@ function CreateChallenge(){
           const response = await ApiHandler.AddChallenge(title, description, start_date, end_date, created_at, creator_id);
         
           if (response) {
-            navigate('/'); 
+            navigate(`/user/${user.userId}`); 
           }
         } catch (err) {
           console.log("Caught error in AddChallenge:", err);

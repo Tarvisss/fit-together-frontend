@@ -22,23 +22,25 @@ function UserProfile() {
   const [showChallenges, setShowChallenges] = useState(false);
   const [quote, setQuote] = useState(fallbackQuote);
   const [quoteAuthor, setQuoteAuthor] = useState(fallbackQuoteAuthor);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const username = userData.username;
+
 
   useEffect(() => {
     const fetchJoinedChallenges = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(localStorage.getItem("userData"));
         const userId = user?.userId;
 
         if (userId) {
           const joined = await ApiHandler.getUserJoinedChallenges(userId);
           setUserChallenges(joined);
         }
+
       } catch (err) {
         console.error("Failed to fetch joined challenges:", err);
       }
     };
-
     fetchJoinedChallenges();
   }, []);
 
@@ -54,7 +56,6 @@ function UserProfile() {
     setUserChallenges(prev => prev.filter(ch => ch.id !== challengeId));
   };
   
-
   useEffect(() => {
     const fetchQuote = async () => {
       try {
@@ -68,7 +69,7 @@ function UserProfile() {
           setQuoteAuthor(quoteAuthor);
         }
       } catch (error) {
-        console.error("Failed to fetch quote:", error);
+    
       }
     };
 
@@ -115,9 +116,9 @@ function UserProfile() {
 
           <Card.Body>
             <hr />
-            <Card.Title>Wellcome: <b>{user.username}</b></Card.Title>
+            <Card.Title>Wellcome: <b>{username}</b></Card.Title>
             <Card.Text>
-              {user.bio}
+              
             </Card.Text>
           </Card.Body>
 

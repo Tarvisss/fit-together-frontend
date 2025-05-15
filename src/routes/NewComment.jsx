@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ApiHandler from "../Api/ApiHandlerClass";
 import CreateCommentComponent from "../components/CreateCommentComponent";
 
-function NewComment() {
+function NewComment({ addComment }) {
   const { id } = useParams();
   const [formState, setFormState] = useState({ content: "" });
 
@@ -15,11 +15,17 @@ function NewComment() {
     }));
 }
 
-  async function addComment(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const { content } = formState;
-    const response = await ApiHandler.createComment(id, content);
-    return response;
+    try {
+        const response = await ApiHandler.createComment(id, content);
+        addComment(response);
+        setFormState({content: ""});
+    } catch (error) {
+        console.error("Error adding comment:", error)
+    }
+    
   }
 
   return (
@@ -27,7 +33,7 @@ function NewComment() {
         <CreateCommentComponent 
             formState={formState}
             handleChange={handleChange}
-            onSubmit={addComment}
+            onSubmit={handleSubmit}
         />
     </>  
   );

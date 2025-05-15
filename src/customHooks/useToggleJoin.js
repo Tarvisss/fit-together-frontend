@@ -1,9 +1,9 @@
 import ApiHandler from "../Api/ApiHandlerClass";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-
-      const useToggleChallenge =  (initialJoinedIds = []) => {
-
+    const useToggleChallenge =  (initialJoinedIds = []) => {
+        const { user } = useContext(AuthContext)
         useEffect(() => {
             setJoinedChallengeIds((prev) => {
               // Avoid re-setting if the values are already equal
@@ -13,16 +13,14 @@ import { useState, useCallback, useEffect } from "react";
               return same ? prev : initialJoinedIds;
             });
           }, [initialJoinedIds]);
-          
+
         const [joinedChallengeIds, setJoinedChallengeIds] = useState(initialJoinedIds)
-
         const toggleChallenge = useCallback(async (challengeId) => {
-
-            const user = JSON.parse(localStorage.getItem("user"));
+            console.log(user.userId)
             const userId = user.userId;
 
             if(!userId) return;
-      
+        
             if (joinedChallengeIds.includes(challengeId)) {
                 try {
                   await ApiHandler.leaveChallenge(challengeId, userId);
@@ -42,5 +40,4 @@ import { useState, useCallback, useEffect } from "react";
           
             return { joinedChallengeIds, toggleChallenge };
           };
-
-      export default useToggleChallenge;
+    export default useToggleChallenge;

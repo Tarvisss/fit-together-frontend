@@ -24,21 +24,20 @@ export function AuthProvider({ children }){
 
     const login = (jwtToken) => {
 
-        const decoded = jwtDecode(jwtToken);
+        const decoded = jwtDecode(jwtToken);1
         const userData = {
             userId: decoded.userId,
             username: decoded.username
         }
-
-        console.log(decoded)
         localStorage.setItem("token", jwtToken);
-
+        localStorage.setItem("userData", JSON.stringify(userData));
         setUser(userData);
         setToken(jwtToken);
       };
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("userData", JSON.stringify(userData));
         setToken(null);
         setUser(null);
     };
