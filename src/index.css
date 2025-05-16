@@ -1,7 +1,29 @@
-
+/* transition for challenge button */
 .hover-shadow:hover {
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
     transform: scale(1.02);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+ /* like button css */
+.thumbs-up-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 1.6rem;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .thumbs-up-icon:hover {
+    background-color: white;
+    color: black;
+    transform: scale(1.2);
   }
   

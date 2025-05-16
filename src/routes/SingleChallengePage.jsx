@@ -1,5 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { faThumbsUp, faThumbtack, faThumbtackSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Button } from 'react-bootstrap';
 import challengeImg from '../assets/abstract-yellow-smooth-wave-lines.png'; 
 import ApiHandler from "../Api/ApiHandlerClass";
@@ -8,14 +10,14 @@ import DisplayCommentCard from "../components/DisplayCommentCard";
 
 
 function SingleChallengePage(){
-   const navigate = useNavigate();
+    const navigate = useNavigate();
     const { id } = useParams()
     const [challenge, setChallenge] = useState({});
-    const [comments, setComments] = useState({})
+    const [comments, setComments] = useState([])
     const [toggleCommentWindow, setToggleCommentWindow] = useState(false);
     const [toggleComments, setToggleComments] = useState(true)
     const [loading, setLoading] = useState(true)
-    
+    const [liked, setLiked] = useState(false)
     // get a single challenge and display it for commenting
     useEffect(() => {
         const getChallenge = async () => {
@@ -45,6 +47,21 @@ function SingleChallengePage(){
         getComments();
     },[id])
     
+    useEffect(() => {
+        const checkIfLiked = async () => {
+          try {
+            const userData = JSON.parse(localStorage.getItem("userData"));
+            const likedChallenges = await ApiHandler.getLikedChallenges(userData.userId);
+            const likedIds = likedChallenges.map(c => c.id);
+            setLiked(likedIds.includes(parseInt(id)));
+          } catch (err) {
+            console.error("Failed to fetch liked challenges", err);
+          }
+        };
+      
+        checkIfLiked();
+      }, [id]);
+      
     //wait until comments render
     if (comments.length === 0) {
         return <p>Loading comments...</p>;
@@ -55,11 +72,37 @@ function SingleChallengePage(){
         const updatedComments = await ApiHandler.fetchComments(id);
         setComments(updatedComments);
     };
+
+    const handleLike = async () => {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        try {
+          if (liked) {
+            await ApiHandler.removeLike(challenge.id, userData.userId);  // unlike
+          } else {
+            await ApiHandler.addLike(challenge.id, userData.userId );     // like
+          }
+          setLiked(!liked);  // toggle UI state
+        } catch (error) {
+          console.error("Failed to toggle like", error.message);
+        }
+      };
+      
     return (
         <div className="d-flex flex-column align-items-center justify-content-center m-3" key={challenge.id}>
+            <Card className="border shadow" style={{ width: '100%', maxWidth: '800px', padding: "5px" }}>
+              {/* Wrapper to position icon over image */}
+              <div style={{ position: 'relative' }}>
+                <Card.Img
+                  variant="top"
+                  src={challengeImg}
+                  style={{ height: "150px", objectFit: "cover" }}
+                />
 
-                  <Card  className="border shadow" style={{ width: '100%', maxWidth: '800px', padding: "5px" }}>
-                    <Card.Img variant="top" src={challengeImg} style={{ height: "150px", objectFit: "cover" }} />
+                <FontAwesomeIcon 
+                icon={liked ? faThumbtackSlash : faThumbtack}
+                className="thumbs-up-icon"
+                onClick={handleLike}/>
+              </div>
                     <Card.Body>
                         <div className="d-flex">
                             <div>
@@ -112,7 +155,7 @@ function SingleChallengePage(){
                       </div>
                     </div>
                   )}
-
+                        
                     <div className=" mt-3 d-flex justify-content-center w-100 ">
                                 <Button 
                                   className=" border shadow"
@@ -132,7 +175,7 @@ function SingleChallengePage(){
                         <h3 className="text-center m-5">No comments yet 😞</h3>
                   )
                 )}
-         </div>
+        </div>
     )
 }
 

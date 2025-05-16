@@ -98,7 +98,7 @@ export default class ApiHandler {
       Authorization: `Bearer ${token}`
     };
 
-    return await this.request("challenges", {}, "get", headers);
+    return await this.request("challenges", null, "get", headers);
   }
 
   static async FetchChallenge(id) {
@@ -108,7 +108,7 @@ export default class ApiHandler {
         Authorization: `Bearer ${token}`
     }
 
-    return await this.request(`challenges/${id}`, {}, "get", headers)
+    return await this.request(`challenges/${id}`, null, "get", headers)
   }
   static async AddChallenge(title, description, start_date, end_date, created_at) {
     try {
@@ -201,7 +201,7 @@ export default class ApiHandler {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
     }
-    const response = await this. request(`challenges/${challengeId}/comments`, {}, "get", headers)
+    const response = await this. request(`challenges/${challengeId}/comments`, null, "get", headers)
     return response;
   }
 
@@ -217,7 +217,7 @@ export default class ApiHandler {
       "Content-Type": "application/json"
     };
 
-    const response = await this.request(`users/${user_id}/joined_challenges`, {}, "get", headers);
+    const response = await this.request(`users/${user_id}/joined_challenges`, null, "get", headers);
     return response.map(c => c.id);
   }
 
@@ -229,7 +229,7 @@ export default class ApiHandler {
       "Content-Type": "application/json"
     };
 
-    return await this.request(`users/${user_id}/full_joined_challenges`, {}, "get", headers);
+    return await this.request(`users/${user_id}/full_joined_challenges`, null, "get", headers);
   }
 
   // ─────────────────────────────
@@ -240,4 +240,37 @@ export default class ApiHandler {
     const response = await axios.get(url);
     return response.data;
   }
+
+  // ─────────────────────────────
+  // LIKES 
+  // ─────────────────────────────
+
+  static async addLike(challengeId, userId) {
+    const token = localStorage.getItem("token");
+
+    return await this.request(`pins/challenges/${challengeId}`, {userId}, "post", {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+  }
+  
+  static async removeLike(challengeId) {
+    const token = localStorage.getItem("token");
+
+    return await this.request(`pins/challenges/${challengeId}`, {}, "delete", {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+  }
+  
+  static async getLikedChallenges(userId) {
+    const token = localStorage.getItem("token");
+
+    return await this.request(`users/${userId}/pins`, null, "get", {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+  }
+  
+  
 }

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import Nav from 'react-bootstrap/Nav';
 import Carousel from 'react-bootstrap/Carousel';
 import { Container} from "react-bootstrap";
@@ -8,12 +9,14 @@ import leaderboardPic from "../assets/1911.i203.018..golden silver bronze ribbon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowLeft, faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 
+
 function Homepage(){
+    const { logout, isAuthenticated} = useContext(AuthContext);
     return (
-        <div className="min-vh-100 d-flex justify-content-center pt-3">
-          <div style={{ width: "80%", maxWidth: "800px" }}>  
-            <Container className="text-center" style={{ marginTop: "10vh", width: "80%", maxWidth: "600px" }}>   
-                <h1 className="text-center mb-4">Lets get you moving.🏃‍➡️🏋🏽‍♂️🤸🏻‍♀️</h1> 
+        <div className="min-vh-100 d-flex justify-content-center ">
+          <div style={{ width: "90%", maxWidth: "1000px" }}>  
+            <Container className="text-center" style={{ marginTop: "10vh", width: "90%", maxWidth: "800px" }}>   
+                <h1 className="text-center mb-2">🏃‍➡️🏋🏽‍♂️🤸🏻‍♀️Lets get you moving.🏃‍➡️🏋🏽‍♂️🤸🏻‍♀️</h1> 
                 <hr />
               <Carousel fade className="text-center rounded shadow"
               nextIcon={<span className="custom-next"><FontAwesomeIcon icon={faCircleArrowRight} /></span>}
@@ -24,7 +27,7 @@ function Homepage(){
                     className="d-block w-100"
                     src={challengePic}
                     alt="First slide"
-                    style={{ maxHeight: "500px", objectFit: "cover", width: "100%" }}
+                    style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
                   <Carousel.Caption className="text-black">
                     <h2><b>Create Challenges</b></h2>
@@ -35,7 +38,7 @@ function Homepage(){
                     className="d-block w-100"
                     src={encouragePic}
                     alt="Second slide"
-                    style={{ maxHeight: "500px", objectFit: "cover", width: "100%" }}
+                    style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
                   <Carousel.Caption className="text-black shadow-md">
                     <h2><b>Encourage others</b></h2>
@@ -46,7 +49,7 @@ function Homepage(){
                     className="d-block w-100"
                     src={leaderboardPic}
                     alt="Third slide"
-                    style={{ maxHeight: "500px", objectFit: "cover", width: "100%" }}
+                    style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
                   <Carousel.Caption className="text-white">
                     <h2><b>Push Yourself</b></h2>
@@ -57,12 +60,23 @@ function Homepage(){
 
               <Container className="text-center mt-4 pt-2 px-5" style={{ width: "80%", maxWidth: "600px" }}>
                 <Nav fill variant="tabs" className="fs-5" defaultActiveKey="/home">
+                <>
+                  {!isAuthenticated && (
+                    <>
+                      <Nav.Item>
+                        <Nav.Link href="/auth/register"><b>Sign Up</b></Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link href="/auth/login"><b>Login</b></Nav.Link>
+                      </Nav.Item>
+                    </>
+                  )}
+                </>
+                  {isAuthenticated && (
                   <Nav.Item>
-                    <Nav.Link href="/auth/register"><b>Sign Up</b></Nav.Link>
+                    <Nav.Link onClick={logout}><b>Logout</b></Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link href="/auth/login"><b>Login</b></Nav.Link>
-                  </Nav.Item>
+                  )}
                 </Nav>
               </Container>
             </div>

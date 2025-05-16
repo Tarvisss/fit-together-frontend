@@ -2,13 +2,13 @@ import React from "react";
 import Col from 'react-bootstrap/Col';
 import Image from "react-bootstrap/Image";
 import { Container, Row } from "react-bootstrap";
- import fallbackProfilePic from "../assets/png-clipart-wall-decal-sticker-bodybuilding-fitness-centre-bodybuilding-physical-fitness-hand (1).png";
+import fallbackProfilePic from "../assets/png-clipart-wall-decal-sticker-bodybuilding-fitness-centre-bodybuilding-physical-fitness-hand (1).png";
+
 
 function DisplayCommentCard({ comment }) {
     const BASE_URL = "http://localhost:3000";
     const username = comment?.users?.username || "Anonymous";
     const profilePic = comment?.users?.imageUrl ? `${BASE_URL}${comment.users.imageUrl}` : fallbackProfilePic
-    console.log(profilePic)
   return (
     <Container className="d-flex justify-content-center align-items-center mt-3">
       <div
