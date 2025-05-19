@@ -39,14 +39,13 @@ function UserLogin(){
           const signupResponse = await ApiHandler.Login(username, password);
       
           if (signupResponse) {
-            console.log(signupResponse)
             login(signupResponse);
             navigate('/'); // success, go to homepage
           }
-        } catch (err) {
-          console.log("Caught error in handle Login:", err);
+        } catch (error) {
+          console.log("Caught error in handle Login:", error);
 
-          const serverMessage = err.message || "Login failed.";
+          const serverMessage = error.message || "Login failed.";
           setErrorMessage(serverMessage);   
         }
       };

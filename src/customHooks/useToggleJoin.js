@@ -30,15 +30,15 @@ import { AuthContext } from "../context/AuthContext";
                 try {
                   await ApiHandler.leaveChallenge(challengeId, userId);
                   setJoinedChallengeIds(prev => prev.filter(id => id !== challengeId));
-                } catch (err) {
-                  console.error("Error leaving challenge:", err);
+                } catch (error) {
+                  console.error("Error leaving challenge:", error);
                 }
               } else {
                 try {
                   await ApiHandler.joinChallenge(challengeId, userId);
                   setJoinedChallengeIds(prev => [...prev, challengeId]);
-                } catch (err) {
-                  console.error("Error joining challenge:", err);
+                } catch (error) {
+                  console.error("Error joining challenge:", error);
                 }
               }
             }, [joinedChallengeIds]);

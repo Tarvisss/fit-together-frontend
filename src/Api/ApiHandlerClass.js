@@ -32,33 +32,26 @@ export default class ApiHandler {
 
   static async SignUp(formData) {
     try {
-      const data = await this.request(
-        "auth/register",
-        formData, // Pass the formData as the payload
-        "post",
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Important to set this header
-          },
-        }
-      );
+      const data = await this.request("auth/register", formData, "post");
   
       if (data?.error) {
-        throw new Error(data.error.message || "Signup failed.");
+        throw new Error(data.error);
       }
   
       if (data?.token) {
-        return data.token;
+        return data;
       }
   
       throw new Error("No token returned.");
     } catch (error) {
       console.error("Error during signup:", error);
-      const errorMessage =
-        error.response?.data?.error?.message || error.message || "Signup failed.";
-      throw new Error(errorMessage);
+  
+      // Try to get detailed server-side error
+      const serverMessage = error.response?.data?.error || error.message || "Signup failed.";
+      throw new Error(serverMessage);
     }
   }
+  
   
 
   static async Login(username, password) {

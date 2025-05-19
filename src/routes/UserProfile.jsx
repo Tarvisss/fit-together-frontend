@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ZenQuote from "../customHooks/FetchQuotes";
 import useToggleChallenge from "../customHooks/useToggleJoin";
 import ApiHandler from "../Api/ApiHandlerClass";
 import Card from 'react-bootstrap/Card';
@@ -12,19 +13,13 @@ import workoutPic1 from '../assets/3699912.jpg';
 import workoutPic2 from '../assets/3644843.jpg';
 import ListChallenges from "../components/ChallengeCard";
 const BASE_URL = "http://localhost:3000";
-const fallbackQuote = "You are free, and that is why you are lost.";
-const fallbackQuoteAuthor = "Franz Kafka";
 
 function UserProfile() {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null)
     const [userChallenges, setUserChallenges] = useState([]);
-    const [createdChallenges, setCreatedChallenges] = useState([]);
     const [showChallenges, setShowChallenges] = useState(false);
-    const [quote, setQuote] = useState(fallbackQuote);
-    const [quoteAuthor, setQuoteAuthor] = useState(fallbackQuoteAuthor);
-    
 
     useEffect(() => {
       const fetchJoinedChallenges = async () => {
@@ -40,8 +35,8 @@ function UserProfile() {
           setUserChallenges(joined);
         }
 
-        } catch (err) {
-          console.error("Failed to fetch joined challenges:", err);
+        } catch (error) {
+          console.error("Failed to fetch joined challenges:", error);
         }
       };
       fetchJoinedChallenges();
@@ -58,26 +53,6 @@ function UserProfile() {
       // Remove from local state if the user left the challenge
       setUserChallenges(prev => prev.filter(ch => ch.id !== challengeId));
     };
-
-    useEffect(() => {
-      const fetchQuote = async () => {
-        try {
-          const url = "http://localhost:3000/api/quote";
-          const data = await ApiHandler.getQuote(url);
-
-          if (data) {
-            const quote = data[0].q;
-            const quoteAuthor = data[0].a;
-            setQuote(quote);
-            setQuoteAuthor(quoteAuthor);
-          }
-        } catch (error) {
-        
-        }
-      };
-
-      fetchQuote();
-    }, []);
 
     return (
       <>
@@ -111,9 +86,8 @@ function UserProfile() {
                     boxShadow: "4px 4px 10px rgba(0,0,0,0.3)"
                   }}
                 />
-                <div>
-                  <h5 style={{ color: "black", marginLeft: "65px" }}>"{quote}"</h5>
-                  <h5 style={{ color: "black", marginLeft: "140px", marginTop: "25px" }}>"{quoteAuthor}"</h5>
+                <div className="m-3 text-black">
+                  <ZenQuote/>
                 </div>
               </div>
             </div>

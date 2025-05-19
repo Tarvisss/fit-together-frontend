@@ -54,8 +54,8 @@ function SingleChallengePage(){
             const likedChallenges = await ApiHandler.getLikedChallenges(userData.userId);
             const likedIds = likedChallenges.map(c => c.id);
             setLiked(likedIds.includes(parseInt(id)));
-          } catch (err) {
-            console.error("Failed to fetch liked challenges", err);
+          } catch (error) {
+            console.error("Failed to fetch liked challenges", error);
           }
         };
       

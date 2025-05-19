@@ -1,13 +1,44 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Fit+Together: Fittness made fun!
 
-## Expanding the ESLint configuration
+ **Link to Fit+Together**  
+    [https://nodejs.org](https://nodejs.org)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# fit-together-frontend
+### Overview
+ Fit+Together is a fitness focused social media website that allows users to partake in challenges  while becoming the best version of themselves.
+
+## Core Features
+ #### User Management
+ - Register with username, email and password
+ - Secure authentication using JWT
+ - User Profile with Image upload
+
+ #### challenges
+ - Create new challenges
+ - Join/leave exsisting challenges
+ - Track joined challenges
+
+ #### Social features
+ - Comment on challenges
+ - Pin challenges
+ - View participants feedback
+
+## Tech Stack  
+ - **Backend**: Node.js, Express, Prisma, PostgresSQL
+ - **Frontend**: React, React-bootstrap 
+ - **Auth&Password hashing**: Bcrypt, Jwt
+ - **Testing**: Jest, Supertest
+ - **Environment Management**: dotenv, dotenv-cli, cross-env
+ - **File Management**: Multer
+
+## Extra Features
+ - Zen Quote Api 
+ 
+## Screenshots
+
+![Landingpage Screenshot](./uploads/LandingPage.png)
+![User Profile Screenshot](./uploads/UserProfile.png)
+![Comments Screenshot](./uploads/Comments.png)
+![Comments Screenshot](./uploads/Fit+Together-Schema.png)

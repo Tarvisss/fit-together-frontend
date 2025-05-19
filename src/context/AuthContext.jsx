@@ -33,7 +33,7 @@ export function AuthProvider({ children }){
             username: decoded.username,
             profilePic: decoded.profilePic
         }
-        console.log(userData)
+        
         localStorage.setItem("token", jwtToken);
         localStorage.setItem("userData", JSON.stringify(userData));
         setUser(userData);
@@ -46,7 +46,7 @@ export function AuthProvider({ children }){
         setToken(null);
         setUser(null);
     };
-    const isAuthenticated = !!token;
+    const isAuthenticated = token;
     return (
         <AuthContext.Provider value={{user, token, login, logout, isAuthenticated}}>
             {children}

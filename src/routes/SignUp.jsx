@@ -75,10 +75,10 @@ function UserSignUp(){
             login(signupResponse);
             navigate('/'); // success, go to homepage
           }
-        } catch (err) {
-          console.log("Caught error in handleSignUp:", err);
+        } catch (error) {
+          console.log("Caught error in handleSignUp:", error);
 
-          const serverMessage = err.message || "Signup failed.";
+          const serverMessage = error.message || "Signup failed.";
           setErrorMessage(serverMessage);   
         }
       };

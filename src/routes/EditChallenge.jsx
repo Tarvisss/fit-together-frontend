@@ -45,10 +45,10 @@ function EditChallenge(){
           if (response) {
             navigate('/'); // success, go to homepage
           }
-        } catch (err) {
-          console.log("Caught error in AddChallenge:", err);
+        } catch (error) {
+          console.log("Caught error in AddChallenge:", error);
 
-          const serverMessage = err.message || "failed to create the challenge.";
+          const serverMessage = error.message || "failed to create the challenge.";
           setErrorMessage(serverMessage);   
         }
       };

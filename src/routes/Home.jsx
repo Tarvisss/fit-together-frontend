@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import FetchQuotes from "../customHooks/FetchQuotes"
 import { AuthContext } from "../context/AuthContext";
 import Nav from 'react-bootstrap/Nav';
 import Carousel from 'react-bootstrap/Carousel';
@@ -29,7 +30,8 @@ function Homepage(){
                     alt="First slide"
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
-                  <Carousel.Caption className="text-black">
+                  <Carousel.Caption className="text-black text-center fs-3 shadow m-5">
+                  <b ><FetchQuotes/></b>
                     <h2><b>Create Challenges</b></h2>
                   </Carousel.Caption>
                 </Carousel.Item>
@@ -40,7 +42,8 @@ function Homepage(){
                     alt="Second slide"
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
-                  <Carousel.Caption className="text-black shadow-md">
+                  <Carousel.Caption className="text-black text-center fs-3 shadow m-5">
+                  <b><FetchQuotes/></b>
                     <h2><b>Encourage others</b></h2>
                   </Carousel.Caption>
                 </Carousel.Item>
@@ -51,7 +54,8 @@ function Homepage(){
                     alt="Third slide"
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
-                  <Carousel.Caption className="text-white">
+                  <Carousel.Caption className="text-white text-center fs-3 shadow m-5">
+                  <b><FetchQuotes /></b>
                     <h2><b>Push Yourself</b></h2>
                   </Carousel.Caption>
                 </Carousel.Item>

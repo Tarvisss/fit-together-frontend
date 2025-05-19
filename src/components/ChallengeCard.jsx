@@ -27,8 +27,8 @@ function ListChallenges({
               // use map to loop through challenge ids and store them in liked challenges
               const likedIds = liked.map(challenge => challenge.id);
               setLikedChallengeIds(likedIds)
-            } catch (err) {
-              console.error("Failed to fetch liked challenges", err);
+            } catch (error) {
+              console.error("Failed to fetch liked challenges", error);
             }
           };
         

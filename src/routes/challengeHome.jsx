@@ -38,8 +38,8 @@ function ChallengeHome(){
                   // use map to loop through challenge ids and store them in pinned challenges
                   const pinnedIds = pinned.map(challenge => challenge.id);
                   setPinnedChallengeIds(pinnedIds)
-                } catch (err) {
-                  console.error("Failed to fetch pinned challenges", err);
+                } catch (error) {
+                  console.error("Failed to fetch pinned challenges", error);
                 }
               };
             
