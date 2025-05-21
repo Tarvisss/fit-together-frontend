@@ -180,7 +180,7 @@ export default class ApiHandler {
     }
     const data = {userId, content}
 
-    const response = await this.request(`challenges/${challengeId}`, data, "post", headers);
+    const response = await this.request(`challenges/${challengeId}/comments`, data, "post", headers);
     return response;
 
   }
@@ -235,13 +235,13 @@ export default class ApiHandler {
   }
 
   // ─────────────────────────────
-  // LIKES 
+  // Pins 
   // ─────────────────────────────
 
   static async addLike(challengeId, userId) {
     const token = localStorage.getItem("token");
 
-    return await this.request(`pins/challenges/${challengeId}`, {userId}, "post", {
+    return await this.request(`pins/challenges/${challengeId}/pins`, {userId}, "post", {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     });
@@ -250,7 +250,7 @@ export default class ApiHandler {
   static async removeLike(challengeId) {
     const token = localStorage.getItem("token");
 
-    return await this.request(`pins/challenges/${challengeId}`, {}, "delete", {
+    return await this.request(`pins/challenges/${challengeId}/pins`, {}, "delete", {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     });

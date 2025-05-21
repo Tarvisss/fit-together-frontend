@@ -30,7 +30,7 @@ function Homepage(){
                     alt="First slide"
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
-                  <Carousel.Caption className="text-black text-center fs-3 shadow m-5">
+                  <Carousel.Caption className="text-black text-center fs-3 m-5">
                   <b ><FetchQuotes/></b>
                     <h2><b>Create Challenges</b></h2>
                   </Carousel.Caption>
@@ -42,7 +42,7 @@ function Homepage(){
                     alt="Second slide"
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
-                  <Carousel.Caption className="text-black text-center fs-3 shadow m-5">
+                  <Carousel.Caption className="text-black text-center fs-3 m-5">
                   <b><FetchQuotes/></b>
                     <h2><b>Encourage others</b></h2>
                   </Carousel.Caption>
@@ -54,7 +54,7 @@ function Homepage(){
                     alt="Third slide"
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
-                  <Carousel.Caption className="text-white text-center fs-3 shadow m-5">
+                  <Carousel.Caption className="text-white text-center fs-3 m-5">
                   <b><FetchQuotes /></b>
                     <h2><b>Push Yourself</b></h2>
                   </Carousel.Caption>
