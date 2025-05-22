@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/custom.scss'
@@ -19,8 +19,8 @@ function App() {
       <BrowserRouter>
         <Navigation/>
           <Routes>
-            <Route path='auth/register' element={<UserSignUp/>}/>
-            <Route path='auth/login' element={<UserLogin/>}/>
+            <Route path='/auth/register' element={<UserSignUp/>}/>
+            <Route path='/auth/login' element={<UserLogin/>}/>
             <Route path='/' element={<Homepage/>}/>
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes/>}>
