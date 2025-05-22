@@ -17,20 +17,23 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navigation/>
-          <Routes>
-            <Route path='/auth/register' element={<UserSignUp/>}/>
-            <Route path='/auth/login' element={<UserLogin/>}/>
-            <Route path='/' element={<Homepage/>}/>
-            {/* Protected Routes */}
-            <Route element={<ProtectedRoutes/>}>
-              <Route path='/challenges/create' element={<CreateChallenge/>}/>
-              <Route path='/challenges/:id/edit' element={<EditChallenge/>}/>
-              <Route path='/challenges/home' element={<ChallengeHome/>}/>
-              <Route path='/challenges/:id' element={<SingleChallengePage/>}/>
-              <Route path='/user/:username' element={<UserProfile/>}/>
+        <Routes>
+          {/* Wrap everything inside a layout route with Navigation */}
+          <Route path="/" element={<Navigation />}>
+            <Route index element={<Homepage />} />
+            <Route path="auth/register" element={<UserSignUp />} />
+            <Route path="auth/login" element={<UserLogin />} />
+        
+            {/* Protected routes nested inside */}
+            <Route element={<ProtectedRoutes />}>
+              <Route path="challenges/create" element={<CreateChallenge />} />
+              <Route path="challenges/:id/edit" element={<EditChallenge />} />
+              <Route path="challenges/home" element={<ChallengeHome />} />
+              <Route path="challenges/:id" element={<SingleChallengePage />} />
+              <Route path="user/:username" element={<UserProfile />} />
             </Route>
-          </Routes>
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
   )

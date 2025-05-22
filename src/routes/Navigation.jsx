@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -10,6 +11,7 @@ import { faHome, faUserCircle, faTrophy } from '@fortawesome/free-solid-svg-icon
 function NavbarComponent() {
   const { isAuthenticated, user, logout } = useContext(AuthContext);
   return (
+    <>
     <Navbar expand="md" bg="info" variant="light" className="shadow-lg rounded-bottom px-10">
       <Container>
         <Navbar.Brand href="/"> 
@@ -53,6 +55,8 @@ function NavbarComponent() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    <Outlet/>
+    </>
   );
 }
 
