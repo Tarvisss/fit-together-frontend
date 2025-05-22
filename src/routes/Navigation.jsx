@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -14,7 +14,7 @@ function NavbarComponent() {
     <>
     <Navbar expand="md" bg="info" variant="light" className="shadow-lg rounded-bottom px-10">
       <Container>
-        <Navbar.Brand href="/"> 
+        <Navbar.Brand as={Link} to="/"> 
           <img
             src={logo}
             alt="Fit+Together Logo"
@@ -30,22 +30,22 @@ function NavbarComponent() {
           <Nav className="ms-sm-auto text-end ">
 
             {!isAuthenticated && (
-              <Nav.Link href='/auth/login' className="fw-bold">Login</Nav.Link>
+              <Nav.Link as={Link} to={'/auth/login'} className="fw-bold">Login</Nav.Link>
             )}
 
-            <Nav.Link href="/" className="fw-bold">
+            <Nav.Link as={Link} to="/" className="fw-bold">
               <FontAwesomeIcon icon={faHome} className='fs-3 pe-1' />
             </Nav.Link>
 
             {isAuthenticated && user && (
               <>
-                <Nav.Link href="/challenges/home" className="fw-bold">
+                <Nav.Link as={Link} to={"/challenges/home"} className="fw-bold">
                   <FontAwesomeIcon icon={faTrophy} className='fs-3 pe-1' />
                 </Nav.Link>
-                <Nav.Link href={`/user/${user.username}`} className="fw-bold">
+                <Nav.Link as={Link} to={`/user/${user.username}`} className="fw-bold">
                   <FontAwesomeIcon icon={faUserCircle} className='fs-3 pe-1' />
                 </Nav.Link>
-                <Nav.Link href='/' className="fw-bold" onClick={logout}>
+                <Nav.Link as={Link} to="/" className="fw-bold" onClick={logout}>
                   Logout
                 </Nav.Link>
               </>
