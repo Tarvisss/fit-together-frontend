@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import FetchQuotes from "../customHooks/FetchQuotes"
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Nav from 'react-bootstrap/Nav';
 import Carousel from 'react-bootstrap/Carousel';
@@ -68,10 +69,10 @@ function Homepage(){
                   {!isAuthenticated && (
                     <>
                       <Nav.Item>
-                        <Nav.Link href="/auth/register"><b>Sign Up</b></Nav.Link>
+                        <Nav.Link as={Link} to={"/auth/register"}><b>Sign Up</b></Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
-                        <Nav.Link href="/auth/login"><b>Login</b></Nav.Link>
+                        <Nav.Link as={Link} to={"/auth/login"}><b>Login</b></Nav.Link>
                       </Nav.Item>
                     </>
                   )}
