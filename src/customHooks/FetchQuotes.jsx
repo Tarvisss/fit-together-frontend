@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import ApiHandler from "../Api/ApiHandlerClass";
 const fallbackQuote = "You are free, and that is why you are lost.";
 const fallbackQuoteAuthor = "Franz Kafka";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ZenQuote = () => {
     const [quote, setQuote] = useState(fallbackQuote);
@@ -9,7 +10,7 @@ const ZenQuote = () => {
     useEffect(() => {
         const fetchQuote = async () => {
           try {
-            const url = "http://localhost:3000/api/quote";
+            const url = `${BASE_URL}/api/quote`;
             const data = await ApiHandler.getQuote(url);
   
             if (data) {

@@ -4,11 +4,11 @@ $secondary: #393E46;
 $light: #EEEEEE;
 $info: #dd952a;
 
-// Now, import the Bootstrap styles after defining your variables
+
 @import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";  // Import the variables first
-@import "bootstrap/scss/mixins";  // Import mixins
-@import "bootstrap/scss/bootstrap";  // Import the full Bootstrap styles
+@import "bootstrap/scss/variables";  
+@import "bootstrap/scss/mixins";  
+@import "bootstrap/scss/bootstrap"; 
 @import "font-awesome/scss/font-awesome";
 
 .custom-prev, .custom-next {
