@@ -6,7 +6,7 @@ import fallbackProfilePic from "../assets/png-clipart-wall-decal-sticker-bodybui
 
 
 function DisplayCommentCard({ comment }) {
-    const BASE_URL = "http://localhost:3000";
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL;
     const username = comment?.users?.username || "Anonymous";
     const profilePic = comment?.users?.imageUrl ? `${BASE_URL}${comment.users.imageUrl}` : fallbackProfilePic
   return (
