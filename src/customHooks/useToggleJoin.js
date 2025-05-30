@@ -1,12 +1,14 @@
 import ApiHandler from "../Api/ApiHandlerClass";
 import { useState, useCallback, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+
     // This hook uses the user stored in context. after much frustration I chose to 
     // use local storage for aquiring ids and the liked
     // take array of challenge ids that a user has joined
     const useToggleChallenge =  (initialJoinedIds = []) => {
         const [joinedChallengeIds, setJoinedChallengeIds] = useState(initialJoinedIds)
         const { user } = useContext(AuthContext)
+
         // each time initialJoinedIds changes this useEffect will run 
         useEffect(() => {
             //callback takes current state and return the new state

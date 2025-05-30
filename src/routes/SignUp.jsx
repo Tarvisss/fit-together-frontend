@@ -72,7 +72,7 @@ function UserSignUp(){
           const signupResponse = await ApiHandler.SignUp(formData);
           console.log("Signup response:", signupResponse);
           if (signupResponse) {
-            login(signupResponse);
+            login(signupResponse.token);
             navigate('/'); // success, go to homepage
           }
         } catch (error) {
@@ -96,7 +96,7 @@ function UserSignUp(){
               <div className="alert alert-danger text-center" role="alert">
                 {errorMessage}
               </div>
-)}
+              )}
               <Form onSubmit={handleSignUp}>
                 <Row className='mb-3'>
                 <Form.Group as={Col} className="mb-3" controlId="formGridUsername">
