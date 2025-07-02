@@ -1,13 +1,15 @@
-.profile-pic{
-    width: 200px;
-    height: 180;
-    border: 1px solid white;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3)
+
+.profile-pic {
+  width: 200px;
+  height: 180px;
+  border: 1px solid white;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
 }
 
-@media (max-width: 768px){
-    .profile-pic{
+@media (max-width: 768px) {
+  .profile-pic {
     width: 110px;
-    height: auto;
-}
+    height: 100px; 
+  }
 }

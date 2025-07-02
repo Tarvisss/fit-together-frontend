@@ -81,6 +81,7 @@ function UserProfile() {
                   roundedCircle
                   className="profile-pic"
                 />
+
                 <div className="m-3 text-black">
                   <ZenQuote/>
                 </div>
