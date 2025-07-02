@@ -81,7 +81,7 @@ function UserProfile() {
                   roundedCircle
                   className="img-fluid"
                   style={{
-                    maxwidth: "200px",
+                    maxWidth: "200px",
                     height: "auto",
                     border: "1px solid white",
                     boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.3)"
