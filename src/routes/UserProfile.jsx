@@ -79,13 +79,7 @@ function UserProfile() {
                 <Image
                   src={user?.profilePic ? `${BASE_URL}${user?.profilePic}` : fallbackProfilePic}
                   roundedCircle
-                  className="img-fluid"
-                  style={{
-                    maxWidth: "200px",
-                    height: "auto",
-                    border: "1px solid white",
-                    boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.3)"
-                  }}
+                  className="profile-pic"
                 />
                 <div className="m-3 text-black">
                   <ZenQuote/>
