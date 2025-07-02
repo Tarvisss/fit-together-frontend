@@ -79,11 +79,12 @@ function UserProfile() {
                 <Image
                   src={user?.profilePic ? `${BASE_URL}${user?.profilePic}` : fallbackProfilePic}
                   roundedCircle
+                  className="img-fluid"
                   style={{
-                    width: "200px",
-                    height: "180px",
+                    maxwidth: "200px",
+                    height: "auto",
                     border: "1px solid white",
-                    boxShadow: "4px 4px 10px rgba(0,0,0,0.3)"
+                    boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.3)"
                   }}
                 />
                 <div className="m-3 text-black">

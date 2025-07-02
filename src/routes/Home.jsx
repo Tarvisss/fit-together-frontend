@@ -32,7 +32,7 @@ function Homepage(){
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
                   <Carousel.Caption className="text-black text-center fs-3 m-5">
-                  <b ><FetchQuotes/></b>
+                  <b className="d-none d-md-block"><FetchQuotes/></b>
                     <h2><b>Create Challenges</b></h2>
                   </Carousel.Caption>
                 </Carousel.Item>
@@ -44,7 +44,7 @@ function Homepage(){
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
                   <Carousel.Caption className="text-black text-center fs-3 m-5">
-                  <b><FetchQuotes/></b>
+                  <b className="d-none d-md-block"><FetchQuotes/></b>
                     <h2><b>Encourage others</b></h2>
                   </Carousel.Caption>
                 </Carousel.Item>
@@ -56,7 +56,7 @@ function Homepage(){
                     style={{ maxHeight: "800px", objectFit: "cover", width: "100%" }}
                   />
                   <Carousel.Caption className="text-white text-center fs-3 m-5">
-                  <b><FetchQuotes /></b>
+                  <b className="d-none d-md-block"><FetchQuotes /></b>
                     <h2><b>Push Yourself</b></h2>
                   </Carousel.Caption>
                 </Carousel.Item>
