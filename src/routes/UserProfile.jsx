@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ZenQuote from "../customHooks/FetchQuotes";
 import useToggleChallenge from "../customHooks/useToggleJoin";
@@ -12,7 +12,9 @@ import userBackground from "../assets/SL-020620-27800-36.png";
 import workoutPic1 from '../assets/3699912.jpg';
 import workoutPic2 from '../assets/3644843.jpg';
 import ListChallenges from "../components/ChallengeCard";
+import "../routes/UserProfile.css"
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 function UserProfile() {
 
