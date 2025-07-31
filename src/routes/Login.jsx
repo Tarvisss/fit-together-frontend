@@ -7,11 +7,12 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { Container, Row } from "react-bootstrap";
 import ApiHandler from '../Api/ApiHandlerClass';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 function UserLogin(){
     const navigate = useNavigate();
-    const { user, login } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
 
     //initial form state
     const [formState, setFormstate] = useState({
@@ -29,7 +30,7 @@ function UserLogin(){
         }));
     }   
 
-    //handle signup submission.
+    //handle Login submission.
     const handleLogin = async (e) => {
         e.preventDefault(); // prevent default form submission behavior
         const { username, password } = formState;
@@ -50,6 +51,29 @@ function UserLogin(){
         }
       };
 
+          // Google Sign-In success handler
+    const handleGoogleSignIn = async (response) => {
+    const id_token = response.credential; // ✅ This is correct
+
+    try {
+        const loginResponse = await fetch('http://localhost:3000/auth/google/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_token }) // ✅ Correct usage
+        });
+
+        const data = await loginResponse.json();
+        if (data.authToken) {
+            login(data.authToken); // Store token and log in the user
+            navigate('/'); // Redirect after successful login
+        } else {
+            setErrorMessage('Google Sign-In failed');
+        }
+    } catch (error) {
+        console.error('Google sign-in error:', error);
+        setErrorMessage('Error during Google Sign-In');
+    }
+};
 
       
     return (
@@ -83,6 +107,13 @@ function UserLogin(){
                 </Button>
               </div>
               </Form>
+              <hr/>
+                {/* Google Sign-In Button */}
+               
+                    <GoogleLogin
+                        onSuccess={handleGoogleSignIn}
+                        onError={() => setErrorMessage('Google Sign-In failed')}
+                    />
           </div>
         </Container>
     )

@@ -44,7 +44,7 @@ import { AuthContext } from "../context/AuthContext";
                 }
               }
             }, [joinedChallengeIds]);
-          
+            // Make these two things available to any component that uses this hook
             return { joinedChallengeIds, toggleChallenge };
           };
     export default useToggleChallenge;

@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-
+//This is my API handler a reusable class that makes calls to the back end (REST API), handles tokens, and organizes all client-side HTTP requests in one place.
 export default class ApiHandler {
   /** Generic request wrapper */
   static async request(endpoint, data = {}, method = "get", headers = {}) {

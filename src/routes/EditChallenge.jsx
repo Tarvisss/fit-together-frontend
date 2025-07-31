@@ -17,7 +17,7 @@ function EditChallenge(){
     })
     const [errorMessage, setErrorMessage] = useState("");
 
-    //hanlder to update the form fields
+    //handlder to update the form fields
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormstate(state => ({

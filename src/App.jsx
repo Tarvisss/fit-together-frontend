@@ -12,6 +12,7 @@ import ChallengeHome from './routes/challengeHome';
 import UserProfile from './routes/UserProfile';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import SingleChallengePage from './routes/SingleChallengePage';
+
 function App() {
 
   return (

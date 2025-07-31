@@ -35,7 +35,6 @@ function CreateChallenge(){
 
           const created_at = new Date().toISOString(); // Set created_at to current timestamp
           const creator_id = user.userId;
-          console.log(creator_id)
 
           if (!creator_id) {
             throw new Error("Creator ID is not defined or user is not logged in.");
