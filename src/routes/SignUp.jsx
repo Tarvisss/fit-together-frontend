@@ -82,7 +82,7 @@ function UserSignUp() {
     const id_token = response.credential; // ✅ This is correct
 
     try {
-        const loginResponse = await fetch('http://localhost:3000/auth/google/signup', {
+        const loginResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/google/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id_token }) // ✅ Correct usage
