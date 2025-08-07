@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import { Container, Row } from "react-bootstrap";
 import ApiHandler from '../Api/ApiHandlerClass';
 import { useGoogleLogin } from '@react-oauth/google';
-import googleIcon from "/home/tarvis/Documents/software_projects/fit+together-v2/frontend/src/assets/icons8-google-32.png"
+import googleIcon from "../assets/icons8-google-32.png"
 
 function UserSignUp() {
     const navigate = useNavigate();
