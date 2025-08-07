@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import ApiHandler from "../Api/ApiHandlerClass";
 const fallbackQuote = "You are free, and that is why you are lost.";
 const fallbackQuoteAuthor = "Franz Kafka";
@@ -33,6 +33,5 @@ const ZenQuote = () => {
         </>
       )
 }
-//style={{ color: "black", marginLeft: "65px" }}
-//style={{ color: "black", marginLeft: "140px", marginTop: "25px" }}
+
 export default ZenQuote;

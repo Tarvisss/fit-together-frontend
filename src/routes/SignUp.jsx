@@ -7,11 +7,12 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { Container, Row } from "react-bootstrap";
 import ApiHandler from '../Api/ApiHandlerClass';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+import googleIcon from "/home/tarvis/Documents/software_projects/fit+together-v2/frontend/src/assets/icons8-google-32.png"
 
 function UserSignUp() {
     const navigate = useNavigate();
-    const { user, login } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
 
     // Initial form state
     const [profileImage, setProfileImage] = useState(null);
@@ -78,29 +79,31 @@ function UserSignUp() {
     };
 
     // Google Sign-In success handler
-    const handleGoogleSignIn = async (response) => {
-    const id_token = response.credential; // ✅ This is correct
+    const googleLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                const loginResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/google/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ access_token: tokenResponse.access_token })
+                });
 
-    try {
-        const loginResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/google/signup`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_token }) // ✅ Correct usage
-        });
-
-        const data = await loginResponse.json();
-        if (data.authToken) {
-            login(data.authToken); // Store token and log in the user
-            navigate('/'); // Redirect after successful login
-        } else {
-            setErrorMessage('Google Sign-In failed');
+                const data = await loginResponse.json();
+                if (data.authToken) {
+                    login(data.authToken);
+                    navigate('/');
+                } else {
+                    setErrorMessage('Google Sign-In failed');
+                }
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                setErrorMessage('Error during Google Sign-In');
+            }
+        },
+        onError: () => {
+            setErrorMessage("Google Sign-In failed");
         }
-    } catch (error) {
-        console.error('Google sign-in error:', error);
-        setErrorMessage('Error during Google Sign-In');
-    }
-};
-
+    });
 
     return (
         <Container className="d-flex justify-content-center align-items-center mt-5 mb-5">
@@ -204,19 +207,22 @@ function UserSignUp() {
                     </div>
                 </Form>
                 <hr/>
-                {/* Google Sign-In Button */}
-                    <GoogleLogin
-                        onSuccess={handleGoogleSignIn}
-                        onError={() => setErrorMessage('Google Sign-In failed')}
-                        render={(renderProps) => (
-                          <button  
-                            onClick={renderProps.onClick}
-                            disabled={renderProps.disabled}
-                            className="btn btn-outline-primary w-100"
-                            > Sign up using your google account
-                          </button>  
-                        )}
-                    />
+                {/* Custom Google Sign-In Button */}
+                <div className="d-grid gap-2">
+                    <Button
+                        className="justify-content-center align-items-center" 
+                        variant="outline-primary" 
+                        type="submit"
+                        width="100%"
+                        onClick={googleLogin}
+                    >
+                        <span>
+                            <img src={googleIcon} alt="" height="20px" width="20px"/>
+                        </span>
+                        Sign up with Google
+                    </Button>
+                </div>
+
             </div>
         </Container>
     );
